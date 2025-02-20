@@ -1,0 +1,406 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Happy Missing Day Muffin❤️</title> <style> /* Global Reset & Base Style */ * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: Arial, sans-serif; overflow: hidden; background: #fce4ec; position: relative; }
+  /* Floating Hearts Container */
+  #heartsContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .heart {
+    width: 20px;
+    height: 20px;
+    background: pink;
+    position: absolute;
+    transform: rotate(45deg);
+    animation: bounce 3s ease-in-out infinite;
+  }
+  .heart::before,
+  .heart::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background: pink;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .heart::before {
+    top: -10px;
+    left: 0;
+  }
+  .heart::after {
+    left: 10px;
+    top: 0;
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: translateY(0) rotate(45deg);
+      opacity: 0.8;
+    }
+    50% {
+      transform: translateY(-30px) rotate(45deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(0) rotate(45deg);
+      opacity: 0.8;
+    }
+  }
+  
+  /* Fade-in Effect */
+  .fade-in {
+    animation: fadeIn 1s forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  /* Container Screens: Loading, Home, Game, and Final */
+  #loadingScreen,
+  #homeScreen,
+  #gameScreen,
+  #finalScreen {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  
+  /* Loading Screen */
+  #loadingScreen {
+    background: #fff0f5;
+    z-index: 1000;
+  }
+  .loading-message {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #d81b60;
+  }
+  .progress-bar-container {
+    width: 80%;
+    height: 20px;
+    background: #ffe0e9;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: pink;
+    animation: progressFill 5s linear forwards;
+  }
+  @keyframes progressFill {
+    from { width: 0%; }
+    to   { width: 100%; }
+  }
+  
+  /* Home Screen */
+  #homeScreen {
+    background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+    cursor: url("magnifying-glass.png"), auto; /* Replace with your custom cursor image URL */
+    text-align: center;
+    padding: 20px;
+  }
+  #homeScreen h1 {
+    font-size: 28px;
+    color: #ad1457;
+    margin-bottom: 30px;
+  }
+  #homeScreen button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background: #d81b60;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #homeScreen button:hover {
+    background: #c2185b;
+  }
+  
+  /* Game Screen with Interactive Clues */
+  #gameScreen {
+    background: #fffde7;
+    position: relative;
+    display: none;
+  }
+  .clue {
+    position: absolute;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #ff80ab, #ff4081);
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+    text-align: center;
+    user-select: none;
+  }
+  .clue:hover {
+    transform: scale(1.3);
+    background: linear-gradient(135deg, #ff4081, #f50057);
+    box-shadow: 0 0 20px rgba(255, 64, 129, 0.7);
+  }
+  #clueDetail {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: #880e4f;
+    max-width: 80%;
+    text-align: center;
+  }
+  #revealButton {
+    position: absolute;
+    bottom: 80px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background: #d81b60;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+    transition: background 0.3s;
+  }
+  #revealButton:hover {
+    background: #c2185b;
+  }
+  
+  /* Final Screen with Collage & Love Letter */
+  #finalScreen {
+    background: linear-gradient(135deg, #e1bee7, #ce93d8);
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+    display: none;
+    animation: bgGlow 10s infinite alternate;
+  }
+  @keyframes bgGlow {
+    0% {
+      background: linear-gradient(135deg, #e1bee7, #ce93d8);
+    }
+    50% {
+      background: linear-gradient(135deg, #d1c4e9, #b39ddb);
+    }
+    100% {
+      background: linear-gradient(135deg, #e1bee7, #ce93d8);
+    }
+  }
+  #finalScreen h1 {
+    font-size: 32px;
+    color: #4a148c;
+    margin-bottom: 20px;
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #ff5eaa, 0 0 30px #ff5eaa;
+    }
+    to {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff5eaa, 0 0 40px #ff5eaa;
+    }
+  }
+  .collage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .collage img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    animation: float 6s ease-in-out infinite;
+    transition: transform 0.3s;
+  }
+  @keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+  }
+  .collage img:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
+  .collage img {
+  width: 300px; /* Adjust the size as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin: 5px; /* Add spacing between images */
+}
+
+  #loveLetterButton {
+    padding: 10px 20px;
+    font-size: 18px;
+    background: #8e24aa;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #loveLetterButton:hover {
+    background: #7b1fa2;
+  }
+  #loveLetterDisplay {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #880e4f;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+  #loveLetterDisplay.visible {
+    opacity: 1;
+  }
+</style>
+</head> <body> <!-- Background Music (Replace "love_song.mp3" with your song file) --> <audio id="loveSong" 
+    src="Guzarish.mp3" loop autoplay hidden></audio>
+    <!-- Floating Hearts Container -->
+<div id="heartsContainer"></div>
+
+<!-- Loading Screen -->
+<div id="loadingScreen">
+  <div class="loading-message">
+    Sirf aaj nhi hai missing day, roz hi hota hai 😭😭, but kisko miss kar rha hu mai ??🥰
+  </div>
+  <div class="progress-bar-container">
+    <div class="progress-bar"></div>
+  </div>
+</div>
+
+<!-- Home Screen -->
+<div id="homeScreen">
+  <h1>Abb kon hai wo, hints diye hai agle page pe</h1>
+  <button id="startSearch">Hints ki taraf prasthan kare 🥰</button>
+</div>
+
+<!-- Game Screen with 10 Interactive Clues -->
+<div id="gameScreen">
+  <!-- Clue positions (using inline styles) -->
+  <div class="clue" style="top: 10%; left: 5%;" data-message="Aankhein double role karti hai, gusse mai dekhe toh darr jaaye, pyaar se dekhe toh doob jaaye🥰">Clue 1</div>
+  <div class="clue" style="top: 15%; left: 75%;" data-message="Cutie hai madam ji chahe kitna bhi gussa kare😭">Clue 2</div>
+  <div class="clue" style="top: 25%; left: 20%;" data-message="Abhi recently flower festival gyi thi, but none of the flowers could compete💅">Clue 3</div>
+  <div class="clue" style="top: 30%; left: 80%;" data-message="Cheeks so plumped, 24x7 mann kare khaa jaao (unlocked a new brownie flavour recently)😋">Clue 4</div>
+  <div class="clue" style="top: 40%; left: 10%;" data-message="Bacho jaisi aawaz nikalte huye bhut cute laggti hai💅">Clue 5</div>
+  <div class="clue" style="top: 50%; left: 50%;" data-message="Needs to realise her self worth, pareshan achi nhi lagti😭">Clue 6</div>
+  <div class="clue" style="top: 60%; left: 30%;" data-message="Mera peace of mind hai ye, nothing makes as happy as she does🥰">Clue 7</div>
+  <div class="clue" style="top: 65%; left: 70%;" data-message="Chhedti bhi ache se hai mujhe hehe, lekin ik mann mai kya hai aur zubaan pe kya🫂">Clue 8</div>
+  <div class="clue" style="top: 75%; left: 15%;" data-message="Khush hi achi lagti hai sirf and i would do anything to keep this happiness😋">Clue 9</div>
+  <div class="clue" style="top: 80%; left: 65%;" data-message="Mai iska biggest cheerleader hu, and she has brought a lot of changes in me for good🫂">Clue 10</div>
+  <div id="clueDetail">Ek ek karke Clues pe click karo...</div>
+  <button id="revealButton" style="display: none;">Chalo abb reveal time</button>
+</div>
+
+<!-- Final Screen with Collage & Love Letter -->
+<div id="finalScreen">
+  <h1>It is the cutest, the sweetest, most edible, most elegant, smartest, most beautiful, my biggest supporter and the love of my life :- My Muffinn 💖 (pretty obv)</h1>
+  <div class="collage">
+    <!-- Replace the src attributes with your own photo URLs -->
+    <img src="pic1.jpg" alt="Photo 1">
+    <img src="pic2.png" alt="Photo 2">
+    <img src="pic3.jpg" alt="Photo 3">
+    <img src="pic4.png" alt="Photo 4">
+  </div>
+  <button id="loveLetterButton">Click MEEEEE </button>
+  <div id="loveLetterDisplay"></div>
+</div>
+
+<script>
+  // Create 50 floating hearts
+  function createHearts() {
+    const heartsContainer = document.getElementById('heartsContainer');
+    for (let i = 0; i < 50; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.top = Math.random() * 100 + '%';
+      heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      heartsContainer.appendChild(heart);
+    }
+  }
+  createHearts();
+  
+  // Transition from Loading Screen to Home Screen after 6 seconds
+  setTimeout(() => {
+    document.getElementById('loadingScreen').style.display = 'none';
+    const home = document.getElementById('homeScreen');
+    home.style.display = 'flex';
+    home.classList.add('fade-in');
+  }, 6000);
+  
+  // Show Game Screen when "Start Search" is clicked
+  document.getElementById('startSearch').addEventListener('click', () => {
+    document.getElementById('homeScreen').style.display = 'none';
+    const game = document.getElementById('gameScreen');
+    game.style.display = 'block';
+    game.classList.add('fade-in');
+  });
+  
+  // Interactive Clues Logic
+  let cluesFound = 0;
+  const totalClues = 10;
+  const clues = document.querySelectorAll('.clue');
+  const clueDetail = document.getElementById('clueDetail');
+  clues.forEach(clue => {
+    clue.addEventListener('mouseenter', () => {
+      clueDetail.textContent = clue.getAttribute('data-message');
+    });
+    clue.addEventListener('mouseleave', () => {
+      clueDetail.textContent = 'Hover over or click a clue to uncover a memory...';
+    });
+    clue.addEventListener('click', () => {
+      if (!clue.classList.contains('found')) {
+        clue.classList.add('found');
+        // Change background to indicate the clue is found
+        clue.style.background = '#c2185b';
+        cluesFound++;
+        if (cluesFound === totalClues) {
+          document.getElementById('revealButton').style.display = 'block';
+        }
+      }
+    });
+  });
+  
+  // Reveal Final Screen when all clues are found and the reveal button is clicked
+  document.getElementById('revealButton').addEventListener('click', () => {
+    document.getElementById('gameScreen').style.display = 'none';
+    const finalScreen = document.getElementById('finalScreen');
+    finalScreen.style.display = 'flex';
+    finalScreen.classList.add('fade-in');
+  });
+  
+  // Display Love Letter on Final Screen when button is clicked
+  document.getElementById('loveLetterButton').addEventListener('click', () => {
+    const loveNote = "Dear VV, I miss you every day, every second, even if I have spent hours with you - I still miss you as soon as I drop you. Even though this sucks, but it is goated to have someone like you to miss 💖 (Tu karti hai miss? - Isse padhke meet pe kuch bol bhi dio chup chaap toh dekhegi website vaise hi😭)";
+    const letterDisplay = document.getElementById('loveLetterDisplay');
+    letterDisplay.textContent = loveNote;
+    letterDisplay.classList.add('visible');
+  });
+</script>
+</body> </html>
